@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Report Incident{% endblock %}
+{% block content %}
+<div class="form-card wide">
+    <h2>Report a New Incident</h2>
+    <form method="POST">
+        <label>Title</label>
+        <input type="text" name="title" required placeholder="Short summary">
+
+        <label>Description</label>
+        <textarea name="description" rows="5" required
+                  placeholder="Describe what happened..."></textarea>
+
+        <div class="row">
+            <div>
+                <label>Category</label>
+                <select name="category">
+                    <option>Technical</option>
+                    <option>Security</option>
+                    <option>Workplace</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div>
+                <label>Severity</label>
+                <select name="severity">
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                    <option>Critical</option>
+                </select>
+            </div>
+        </div>
+
+        <label>Location</label>
+        <input type="text" name="location" placeholder="e.g. Block A, Server Room">
+
+        <button class="btn btn-primary" type="submit">Submit Incident</button>
+    </form>
+</div>
+{% endblock %}

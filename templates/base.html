@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Incident Reporting System{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="{{ url_for('index') }}">🛡️ Incident Reporting System</a>
+    <nav>
+        {% if session.account_type == 'user' %}
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('report') }}">Report Incident</a>
+            <a href="{{ url_for('notifications') }}">Notifications</a>
+            <span class="who">{{ session.name }}</span>
+            <a class="btn-logout" href="{{ url_for('logout') }}">Logout</a>
+        {% elif session.account_type == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+            <span class="who">{{ session.name }} (Admin)</span>
+            <a class="btn-logout" href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">User Login</a>
+            <a href="{{ url_for('admin_login') }}">Admin Login</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    Database Systems Project &middot; Incident Reporting System
+</footer>
+</body>
+</html>

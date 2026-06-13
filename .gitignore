@@ -1,0 +1,16 @@
+# ---- Portable MySQL engine + its data (huge binaries, do NOT upload) ----
+mysql/
+mysql_data/
+my.ini
+
+# ---- Python ----
+__pycache__/
+*.pyc
+
+# ---- Setup temp ----
+_setup/_extracted/
+docs/_qa/
+*.zip
+
+# ---- Editor / tooling ----
+.vscode/

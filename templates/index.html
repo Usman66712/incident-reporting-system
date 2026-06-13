@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+    <h1>Incident Reporting System</h1>
+    <p class="subtitle">
+        Report incidents, track their progress, and let administrators
+        verify, assign and resolve them - all backed by a relational
+        MySQL database.
+    </p>
+    <div class="hero-actions">
+        <a class="btn btn-primary" href="{{ url_for('register') }}">Create User Account</a>
+        <a class="btn" href="{{ url_for('login') }}">User Login</a>
+        <a class="btn btn-ghost" href="{{ url_for('admin_login') }}">Admin Login</a>
+    </div>
+</section>
+
+<section class="cards">
+    <div class="card">
+        <h3>📝 Report</h3>
+        <p>Users submit incidents with a description, category, severity and location.</p>
+    </div>
+    <div class="card">
+        <h3>🔎 Verify &amp; Assign</h3>
+        <p>Admins review each incident, verify it and assign it to staff.</p>
+    </div>
+    <div class="card">
+        <h3>✅ Resolve &amp; Notify</h3>
+        <p>Staff record the resolution and the reporter is notified automatically.</p>
+    </div>
+</section>
+{% endblock %}

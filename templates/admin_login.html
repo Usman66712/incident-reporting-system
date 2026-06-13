@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Admin Login{% endblock %}
+{% block content %}
+<div class="form-card">
+    <h2>Admin Login</h2>
+    <form method="POST">
+        <label>Email</label>
+        <input type="email" name="email" required>
+
+        <label>Password</label>
+        <input type="password" name="password" required>
+
+        <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+    <p class="form-foot muted">Demo admin: admin@example.com / admin123</p>
+</div>
+{% endblock %}

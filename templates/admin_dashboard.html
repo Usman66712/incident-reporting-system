@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h2>All Incidents</h2>
+
+<div class="tabs">
+    {% for tab in ['All','Pending','Verified','Assigned','Resolved','Rejected'] %}
+        <a class="tab {% if active == tab %}active{% endif %}"
+           href="{{ url_for('admin_dashboard', status=tab) }}">
+           {{ tab }} <span class="count">{{ summary.get(tab, 0) }}</span>
+        </a>
+    {% endfor %}
+</div>
+
+{% if incidents %}
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th><th>Title</th><th>Reporter</th><th>Category</th>
+            <th>Severity</th><th>Status</th><th>Reported</th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for i in incidents %}
+        <tr>
+            <td>#{{ i.incident_id }}</td>
+            <td>{{ i.title }}</td>
+            <td>{{ i.reporter_name }}</td>
+            <td>{{ i.category }}</td>
+            <td><span class="sev sev-{{ i.severity }}">{{ i.severity }}</span></td>
+            <td><span class="status status-{{ i.status | replace(' ', '') }}">{{ i.status }}</span></td>
+            <td>{{ i.reported_at.strftime('%d %b %Y') }}</td>
+            <td><a href="{{ url_for('admin_incident', incident_id=i.incident_id) }}">Manage</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="empty">No incidents in this category.</div>
+{% endif %}
+{% endblock %}

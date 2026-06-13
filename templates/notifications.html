@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<h2>Notifications</h2>
+
+{% if notifications %}
+<ul class="notif-list">
+    {% for n in notifications %}
+    <li class="notif {% if n.status == 'Unread' %}unread{% endif %}">
+        <div class="notif-msg">{{ n.message }}</div>
+        <div class="notif-meta">
+            Incident: {{ n.incident_title }} &middot;
+            {{ n.created_at.strftime('%d %b %Y, %H:%M') }} &middot;
+            {{ n.type }}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<div class="empty">No notifications yet.</div>
+{% endif %}
+{% endblock %}

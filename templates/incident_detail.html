@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Incident #{{ incident.incident_id }}{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('dashboard') }}">&larr; Back to dashboard</a>
+
+<div class="detail-card">
+    <div class="detail-head">
+        <h2>#{{ incident.incident_id }} &middot; {{ incident.title }}</h2>
+        <span class="status status-{{ incident.status | replace(' ', '') }}">{{ incident.status }}</span>
+    </div>
+
+    <p class="desc">{{ incident.description }}</p>
+
+    <div class="meta-grid">
+        <div><span>Category</span>{{ incident.category }}</div>
+        <div><span>Severity</span>{{ incident.severity }}</div>
+        <div><span>Location</span>{{ incident.location or '-' }}</div>
+        <div><span>Reported by</span>{{ incident.reporter_name }}</div>
+        <div><span>Reported at</span>{{ incident.reported_at.strftime('%d %b %Y, %H:%M') }}</div>
+        <div><span>Handled by</span>{{ incident.admin_name or 'Not assigned yet' }}</div>
+    </div>
+</div>
+
+<div class="track">
+    <h3>Progress</h3>
+
+    <div class="track-step {% if verification %}done{% endif %}">
+        <h4>1. Verification</h4>
+        {% if verification %}
+            <p>Marked <b>{{ verification.status }}</b> by {{ verification.admin_name }}
+               on {{ verification.verified_at.strftime('%d %b %Y') }}.</p>
+            {% if verification.notes %}<p class="muted">Note: {{ verification.notes }}</p>{% endif %}
+        {% else %}
+            <p class="muted">Waiting for an admin to verify this incident.</p>
+        {% endif %}
+    </div>
+
+    <div class="track-step {% if resolution %}done{% endif %}">
+        <h4>2. Resolution</h4>
+        {% if resolution %}
+            <p><b>{{ resolution.status }}</b> by {{ resolution.admin_name }}
+               on {{ resolution.completion_date.strftime('%d %b %Y') }}.</p>
+            <p>Actions taken: {{ resolution.actions_taken }}</p>
+        {% else %}
+            <p class="muted">Not resolved yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

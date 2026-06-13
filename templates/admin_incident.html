@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Manage Incident #{{ incident.incident_id }}{% endblock %}
+{% block content %}
+<a class="back" href="{{ url_for('admin_dashboard') }}">&larr; Back to all incidents</a>
+
+<div class="detail-card">
+    <div class="detail-head">
+        <h2>#{{ incident.incident_id }} &middot; {{ incident.title }}</h2>
+        <span class="status status-{{ incident.status | replace(' ', '') }}">{{ incident.status }}</span>
+    </div>
+    <p class="desc">{{ incident.description }}</p>
+    <div class="meta-grid">
+        <div><span>Category</span>{{ incident.category }}</div>
+        <div><span>Severity</span>{{ incident.severity }}</div>
+        <div><span>Location</span>{{ incident.location or '-' }}</div>
+        <div><span>Reporter</span>{{ incident.reporter_name }} ({{ incident.reporter_email }})</div>
+        <div><span>Reported at</span>{{ incident.reported_at.strftime('%d %b %Y, %H:%M') }}</div>
+        <div><span>Assigned to</span>{{ incident.admin_name or 'Nobody yet' }}</div>
+    </div>
+</div>
+
+<div class="admin-actions">
+
+    <div class="action-box">
+        <h3>1. Verify</h3>
+        {% if verification %}
+            <p class="done-note">Already {{ verification.status }}.</p>
+        {% else %}
+        <form method="POST" action="{{ url_for('admin_verify', incident_id=incident.incident_id) }}">
+            <label>Decision</label>
+            <select name="decision">
+                <option value="Verified">Verified (valid incident)</option>
+                <option value="Rejected">Rejected (not valid)</option>
+            </select>
+            <label>Notes</label>
+            <textarea name="notes" rows="2" placeholder="Optional notes"></textarea>
+            <button class="btn btn-primary" type="submit">Save Verification</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div class="action-box">
+        <h3>2. Assign</h3>
+        <form method="POST" action="{{ url_for('admin_assign', incident_id=incident.incident_id) }}">
+            <label>Assign to staff</label>
+            <select name="assigned_to">
+                {% for a in admins %}
+                    <option value="{{ a.admin_id }}"
+                        {% if incident.assigned_to == a.admin_id %}selected{% endif %}>
+                        {{ a.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-primary" type="submit">Assign</button>
+        </form>
+    </div>
+
+    <div class="action-box">
+        <h3>3. Resolve</h3>
+        {% if resolution %}
+            <p class="done-note">Resolved. Actions: {{ resolution.actions_taken }}</p>
+        {% elif verification and verification.status == 'Verified' %}
+        <form method="POST" action="{{ url_for('admin_resolve', incident_id=incident.incident_id) }}">
+            <label>Actions taken</label>
+            <textarea name="actions_taken" rows="3" required
+                      placeholder="Describe how it was resolved"></textarea>
+            <button class="btn btn-primary" type="submit">Mark Resolved</button>
+        </form>
+        {% else %}
+            <p class="muted">This incident must be verified first before it can be resolved.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
